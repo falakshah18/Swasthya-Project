@@ -1,0 +1,229 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SwasthyaSaathi Referral Slip - {{ session.session_id }}</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --danger: #dc2626;
+            --warning: #eab308;
+            --text-dark: #1f2937;
+            --text-light: #6b7280;
+        }
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            color: var(--text-dark);
+            line-height: 1.5;
+            margin: 0;
+            padding: 2rem;
+            background: #f3f4f6;
+        }
+        .page-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 3rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .header {
+            text-align: center;
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 1rem;
+            margin-bottom: 2rem;
+        }
+        .header h1 {
+            color: var(--primary);
+            margin: 0 0 0.5rem 0;
+            font-size: 2rem;
+        }
+        .header p {
+            color: var(--text-light);
+            margin: 0;
+            font-size: 1.1rem;
+        }
+        .urgency-badge {
+            display: inline-block;
+            padding: 0.5rem 1.5rem;
+            border-radius: 9999px;
+            font-weight: bold;
+            font-size: 1.25rem;
+            margin-top: 1rem;
+            text-transform: uppercase;
+            color: white;
+        }
+        .urgency-high { background-color: var(--danger); box-shadow: 0 2px 10px rgba(220,38,38,0.3); }
+        .urgency-medium { background-color: var(--warning); color: #854d0e; }
+        .urgency-low { background-color: #16a34a; }
+        
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        .info-box {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 1.5rem;
+        }
+        .info-box h3 {
+            margin-top: 0;
+            color: var(--primary);
+            font-size: 1.1rem;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        .info-row {
+            margin-bottom: 0.5rem;
+            display: flex;
+        }
+        .info-label {
+            font-weight: 600;
+            width: 120px;
+            color: #475569;
+        }
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        .tag {
+            background: #e0e7ff;
+            color: #3730a3;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        .footer {
+            margin-top: 3rem;
+            text-align: center;
+            font-size: 0.85rem;
+            color: var(--text-light);
+            border-top: 1px dashed #cbd5e1;
+            padding-top: 1.5rem;
+        }
+        
+        @page {
+            size: A4;
+            margin: 0;
+        }
+        @media print {
+            body { background: white; padding: 0; }
+            .page-container { box-shadow: none; padding: 2cm; max-width: none; }
+            .no-print { display: none !important; }
+        }
+    </style>
+</head>
+<body>
+    <div class="page-container">
+        <!-- Print Trigger -->
+        <div style="text-align: right; margin-bottom: 1rem;" class="no-print">
+            <button onclick="window.print()" style="background: var(--primary); color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 1.1rem;">🖨️ Print / Save as PDF</button>
+        </div>
+
+        <div class="header">
+            <h1>SwasthyaSaathi Clinic Referral</h1>
+            <p>Official AI-Assisted Remote Triage Report</p>
+            
+            {% if session.urgency_level == 'EMERGENCY' %}
+                <div class="urgency-badge urgency-high">🚨 EMERGENCY DISPATCH</div>
+            {% elif session.urgency_level == 'VISIT CLINIC' %}
+                <div class="urgency-badge urgency-high">🔴 HIGH PRIORITY / URGENT</div>
+            {% elif session.urgency_level == 'Consult Doctor' %}
+                <div class="urgency-badge urgency-medium">🟡 MONITOR / CONSULT DOCTOR</div>
+            {% else %}
+                <div class="urgency-badge urgency-low">🟢 ROUTINE / SELF-CARE</div>
+            {% endif %}
+        </div>
+
+        <div class="grid-2">
+            <div class="info-box">
+                <h3>Patient Demographics</h3>
+                <div class="info-row"><div class="info-label">Full Name:</div><div>{{ patient.user.get_full_name|default:patient.user.username }}</div></div>
+                <div class="info-row"><div class="info-label">Age:</div><div>{{ patient.age|default:"N/A" }} Yrs</div></div>
+                <div class="info-row"><div class="info-label">Gender:</div><div>{{ patient.get_gender_display|default:"N/A" }}</div></div>
+                <div class="info-row"><div class="info-label">Village:</div><div>{{ patient.user.village|default:"N/A" }}</div></div>
+                <div class="info-row"><div class="info-label">Contact:</div><div>{{ patient.emergency_contact|default:patient.user.phone|default:"N/A" }}</div></div>
+            </div>
+
+            <div class="info-box">
+                <h3>Medical History</h3>
+                <div class="info-row">
+                    <div class="info-label">Known Relapse:</div>
+                    <div class="tags">
+                        {% for hist in patient.medical_history %}
+                            <span class="tag" style="background: #fef3c7; color: #92400e;">{{ hist }}</span>
+                        {% empty %}
+                            <span>None Stated</span>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="info-row" style="margin-top: 0.75rem;">
+                    <div class="info-label">Allergies:</div>
+                    <div class="tags">
+                        {% for allergy in patient.allergies %}
+                            <span class="tag" style="background: #fee2e2; color: #991b1b;">{{ allergy }}</span>
+                        {% empty %}
+                            <span>None Declared</span>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="info-box" style="margin-bottom: 2rem;">
+            <h3>AI Triage Assessment</h3>
+            <div class="info-row">
+                <div class="info-label" style="width: 150px;">Date Generated:</div>
+                <div><strong>{{ session.created_at|date:"F d, Y, h:i A" }}</strong></div>
+            </div>
+            <div class="info-row">
+                <div class="info-label" style="width: 150px;">Session ID:</div>
+                <div>#{{ session.session_id }}</div>
+            </div>
+        </div>
+
+        <div class="info-box" style="border-left: 4px solid var(--primary);">
+            <h3>Reported Symptoms</h3>
+            <div class="tags">
+                {% for sym in session.symptoms %}
+                    <span class="tag" style="font-size: 1rem; padding: 0.4rem 1rem;">{{ sym|title }}</span>
+                {% empty %}
+                    <span>No valid keywords recognized.</span>
+                {% endfor %}
+            </div>
+        </div>
+        
+        {% if session.predicted_conditions %}
+        <div class="info-box" style="margin-top: 2rem; border-left: 4px solid var(--warning);">
+            <h3>Predicted Differential Diagnosis</h3>
+            <ul style="margin: 0; padding-left: 1.5rem; color: #334155;">
+                {% for cond in session.predicted_conditions %}
+                    <li style="margin-bottom: 0.25rem;">{{ cond|title }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+
+        <div class="footer">
+            <p style="font-weight: bold; color: var(--danger);">DISCLAIMER: This is an AI-generated preliminary triage report. It is NOT a professional medical diagnosis.</p>
+            <p>Generated by SwasthyaSaathi Rural Health Platform &copy; 2026</p>
+        </div>
+    </div>
+
+    <!-- Automatically trigger the print dialog when the page loads -->
+    <script>
+        window.onload = function() {
+            setTimeout(function() {
+                window.print();
+            }, 500);
+        };
+    </script>
+</body>
+</html>

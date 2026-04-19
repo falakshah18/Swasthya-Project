@@ -1,0 +1,412 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign Up - SwasthyaSaathi</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Outfit', sans-serif;
+      background: #f8fafc;
+      color: #0f172a;
+      display: flex;
+      min-height: 100vh;
+    }
+    .split-layout {
+      display: flex;
+      width: 100%;
+    }
+    .split-left {
+      flex: 1.2;
+      background: linear-gradient(135deg, #0f766e 0%, #064e3b 100%);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      padding: 3rem;
+      overflow: hidden;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+    }
+    .split-left::before {
+      content: '';
+      position: absolute;
+      top: -50%; left: -50%; width: 200%; height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 60%);
+      animation: rotate 30s linear infinite;
+    }
+    @keyframes rotate { 100% { transform: rotate(360deg); } }
+    .hero-content {
+      position: relative;
+      z-index: 10;
+      max-width: 480px;
+    }
+    .hero-icon { font-size: 5rem; margin-bottom: 1.5rem; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.2)); }
+    .hero-title { font-size: 3rem; font-weight: 700; margin-bottom: 1rem; letter-spacing: -0.02em; line-height: 1.1; }
+    .hero-subtitle { font-size: 1.25rem; line-height: 1.6; opacity: 0.85; font-weight: 300; }
+
+    .split-right {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 3rem 2rem;
+      background: #ffffff;
+      min-height: 100vh;
+    }
+    .auth-container {
+      width: 100%;
+      max-width: 420px;
+    }
+    .auth-header { margin-bottom: 2.5rem; text-align: left; }
+    .auth-header h2 { font-size: 2.2rem; font-weight: 700; color: #0f172a; margin-bottom: 0.5rem; letter-spacing: -0.02em; }
+    .auth-header p { color: #64748b; font-size: 1.05rem; }
+    
+    .form-group { margin-bottom: 1.5rem; position: relative; }
+    .form-group label {
+      display: block; font-size: 0.85rem; font-weight: 600; color: #475569; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.05em;
+    }
+    .form-control {
+      width: 100%; padding: 1rem 1.2rem;
+      border: 2px solid #e2e8f0; border-radius: 16px;
+      font-size: 1rem; font-family: inherit; color: #0f172a;
+      box-sizing: border-box; background: #f8fafc;
+      transition: all 0.3s ease;
+    }
+    .form-control:focus {
+      outline: none; border-color: #0d9488; background: #ffffff;
+      box-shadow: 0 0 0 4px rgba(13, 148, 136, 0.1);
+    }
+    
+    .auth-btn {
+      width: 100%; padding: 1.1rem; border: none;
+      background: #0d9488;
+      color: white; font-weight: 600; font-size: 1.1rem;
+      border-radius: 16px; cursor: pointer;
+      box-shadow: 0 4px 14px rgba(13, 148, 136, 0.3);
+      transition: all 0.3s ease; font-family: inherit;
+      margin-top: 1rem;
+    }
+    .auth-btn:hover {
+      transform: translateY(-2px); box-shadow: 0 8px 25px rgba(13, 148, 136, 0.4); background: #0f766e;
+    }
+    
+    .error-msg {
+      background: #fef2f2; color: #ef4444; padding: 1rem; border-radius: 12px;
+      border: 1px solid #fee2e2; font-size: 0.95rem; margin-bottom: 1.5rem;
+      display: flex; align-items: center; gap: 0.5rem; font-weight: 500;
+    }
+    
+    .section-title {
+      font-size: 0.95rem;
+      margin: 2rem 0 1.5rem;
+      color: #64748b;
+      text-align: left;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .section-title::after {
+      content: "";
+      flex: 1;
+      height: 2px;
+      background: #e2e8f0;
+      margin-left: 15px;
+      border-radius: 2px;
+    }
+
+    .auth-footer {
+      margin-top: 2rem; color: #64748b; font-size: 1rem; font-weight: 500; padding-bottom: 2rem;
+    }
+    .auth-footer a {
+      color: #0d9488; text-decoration: none; font-weight: 700; transition: color 0.2s;
+    }
+    .auth-footer a:hover { color: #0f766e; text-decoration: underline; }
+
+    .lang-switcher {
+      position: absolute; top: 1.5rem; right: 1.5rem; z-index: 100;
+    }
+    .lang-switcher select {
+      padding: 0.5rem 1rem; border-radius: 20px; border: 1px solid #e2e8f0; font-family: inherit;
+      background: #ffffff; color: #0f172a; font-size: 0.95rem; font-weight: 500; cursor: pointer;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.05); transition: border-color 0.2s;
+    }
+    .lang-switcher select:focus { outline: none; border-color: #0d9488; }
+
+    @media (max-width: 900px) {
+      .split-left { display: none; }
+      .split-right { background: #f8fafc; align-items: flex-start; padding-top: 5vh; }
+      .auth-container { background: #ffffff; padding: 2.5rem; border-radius: 24px; box-shadow: 0 20px 40px rgba(0,0,0,0.04); }
+    }
+  </style>
+</head>
+<body>
+  <div class="lang-switcher">
+    <select id="langSelect" onchange="changeLanguage(this.value)">
+      <option value="en">English</option>
+      <option value="hi">हिंदी (Hindi)</option>
+      <option value="gu">ગુજરાતી (Gujarati)</option>
+      <option value="mr">मराठी (Marathi)</option>
+      <option value="ta">தமிழ் (Tamil)</option>
+    </select>
+  </div>
+  <div class="split-layout">
+    <div class="split-left">
+      <div class="hero-content">
+        <div class="hero-icon">🌟</div>
+        <h1 class="hero-title" data-i18n="hero_title_signup">Join SwasthyaSaathi</h1>
+        <p class="hero-subtitle" data-i18n="hero_sub_signup">Create your free account today to securely track your healthcare and empower your family with instant emergency alerts when you need them most.</p>
+      </div>
+    </div>
+    <div class="split-right">
+      <div class="auth-container">
+        <div class="auth-header">
+          <h2 data-i18n="auth_signup_hi">Create Account</h2>
+          <p data-i18n="auth_signup_sub">Register below to access your personal dashboard.</p>
+        </div>
+        
+        {% if error %}
+          <div class="error-msg">⚠️ {{ error }}</div>
+        {% endif %}
+        
+        <form method="post">
+          {% csrf_token %}
+          <div class="form-group">
+            <label for="id_username" data-i18n="lbl_username">Username</label>
+            <input type="text" name="username" autofocus autocapitalize="none" autocomplete="username" maxlength="150" required id="id_username" class="form-control" placeholder="Choose a username" data-i18n-ph="ph_username_sign">
+          </div>
+          <div class="form-group">
+            <label for="id_email" data-i18n="lbl_email">Your Email Address</label>
+            <input type="email" name="email" required id="id_email" class="form-control" placeholder="e.g. you@example.com" data-i18n-ph="ph_email">
+          </div>
+          <div class="form-group">
+            <label for="id_password" data-i18n="lbl_password">Password</label>
+            <input type="password" name="password" autocomplete="new-password" required id="id_password" class="form-control" placeholder="Create a strong password" data-i18n-ph="ph_password">
+          </div>
+          
+          <div class="section-title" data-i18n="sec_personal">Personal Details</div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            <div class="form-group" style="margin-bottom: 0;">
+              <label for="id_age" data-i18n="lbl_age">Age</label>
+              <input type="number" name="age" required id="id_age" class="form-control" placeholder="e.g. 34" min="1" max="120" data-i18n-ph="ph_age">
+            </div>
+            <div class="form-group" style="margin-bottom: 0;">
+              <label for="id_gender" data-i18n="lbl_gen">Gender</label>
+              <select name="gender" required id="id_gender" class="form-control" style="cursor: pointer; background-color: var(--surface);">
+                <option value="O" data-i18n="opt_gen_o">Other</option>
+                <option value="M" data-i18n="opt_gen_m">Male</option>
+                <option value="F" data-i18n="opt_gen_f">Female</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="id_med_history" data-i18n="lbl_med">Major Health Conditions (Optional)</label>
+            <input type="text" name="medical_history" id="id_med_history" class="form-control" placeholder="e.g. Diabetes, Asthma" data-i18n-ph="ph_med">
+          </div>
+          <div class="form-group">
+            <label for="id_allergies" data-i18n="lbl_allergies">Allergies (Optional)</label>
+            <input type="text" name="allergies" id="id_allergies" class="form-control" placeholder="e.g. Peanuts, Penicillin" data-i18n-ph="ph_allergies">
+          </div>
+          
+          <div class="section-title" data-i18n="sec_emergency">Emergency Contact Alerts</div>
+          
+          <div class="form-group">
+            <label for="id_e_email" data-i18n="lbl_e_email">Family Member Email</label>
+            <input type="email" name="emergency_email" required id="id_e_email" class="form-control" placeholder="e.g. family@email.com" data-i18n-ph="ph_e_email">
+          </div>
+          <div class="form-group">
+            <label for="id_e_contact" data-i18n="lbl_e_phone">Family Member Phone</label>
+            <input type="text" name="emergency_contact" required id="id_e_contact" class="form-control" placeholder="e.g. 9876543210" data-i18n-ph="ph_e_phone">
+          </div>
+
+          <button type="submit" class="auth-btn" data-i18n="btn_signup_submit">Create Free Account</button>
+        </form>
+
+        <div class="auth-footer">
+          <span data-i18n="txt_have_account">Already have an account?</span> <a href="{% url 'login' %}" data-i18n="btn_login_link">Sign In</a>
+        </div>
+      </div>
+    </div>
+  <script>
+    const TRANSLATIONS = {
+      en: {
+        hero_title_signup: "Join SwasthyaSaathi",
+        hero_sub_signup: "Create your free account today to securely track your healthcare and empower your family with instant emergency alerts when you need them most.",
+        auth_signup_hi: "Create Account",
+        auth_signup_sub: "Register below to access your personal dashboard.",
+        sec_emergency: "Emergency Contact Alerts",
+        sec_personal: "Personal Details",
+        lbl_username: "Username",
+        lbl_password: "Password",
+        lbl_email: "Your Email Address",
+        lbl_e_email: "Family Member Email",
+        lbl_e_phone: "Family Member Phone",
+        lbl_age: "Age",
+        lbl_gen: "Gender",
+        opt_gen_o: "Other", opt_gen_m: "Male", opt_gen_f: "Female",
+        lbl_med: "Major Health Conditions (Optional)",
+        lbl_allergies: "Allergies (Optional)",
+        ph_username_sign: "Choose a username",
+        ph_password: "Create a strong password",
+        ph_email: "e.g. you@example.com",
+        ph_e_email: "e.g. family@email.com",
+        ph_e_phone: "e.g. 9876543210",
+        ph_age: "34",
+        ph_med: "e.g. Diabetes, Asthma",
+        ph_allergies: "e.g. Peanuts, Penicillin",
+        btn_signup_submit: "Create Free Account",
+        txt_have_account: "Already have an account?",
+        btn_login_link: "Sign In"
+      },
+      hi: {
+        hero_title_signup: "स्वास्थ्यसाथी में शामिल हों",
+        hero_sub_signup: "सुरक्षित रूप से अपनी स्वास्थ्य देखभाल को ट्रैक करने के लिए आज ही अपना मुफ़्त खाता बनाएँ।",
+        auth_signup_hi: "खाता बनाएँ",
+        auth_signup_sub: "अपने व्यक्तिगत डैशबोर्ड तक पहुँचने के लिए नीचे पंजीकरण करें।",
+        sec_emergency: "आपातकालीन संपर्क अलर्ट",
+        sec_personal: "व्यक्तिगत विवरण",
+        lbl_username: "उपयोगकर्ता नाम",
+        lbl_password: "पासवर्ड",
+        lbl_email: "आपका ईमेल पता",
+        lbl_e_email: "परिवार के सदस्य का ईमेल",
+        lbl_e_phone: "परिवार के सदस्य का फोन",
+        lbl_age: "उम्र",
+        lbl_gen: "लिंग",
+        opt_gen_o: "अन्य", opt_gen_m: "पुरुष", opt_gen_f: "महिला",
+        lbl_med: "प्रमुख स्वास्थ्य स्थितियां (वैकल्पिक)",
+        lbl_allergies: "एलर्जी (वैकल्पिक)",
+        ph_username_sign: "उपयोगकर्ता नाम चुनें",
+        ph_password: "एक मजबूत पासवर्ड बनाएँ",
+        ph_email: "जैसे you@example.com",
+        ph_e_email: "जैसे family@email.com",
+        ph_e_phone: "जैसे 9876543210",
+        ph_age: "34",
+        ph_med: "जैसे मधुमेह, अस्थमा",
+        ph_allergies: "जैसे मूंगफली, पेनिसिलिन",
+        btn_signup_submit: "मुफ़्त खाता बनाएँ",
+        txt_have_account: "क्या आपके पास पहले से खाता है?",
+        btn_login_link: "साइन इन करें"
+      },
+      gu: {
+        hero_title_signup: "સ્વાસ્થ્યસાથીમાં જોડાઓ",
+        hero_sub_signup: "આરોગ્ય સંભાળને ટ્રૅક કરવા માટે આજે જ તમારું મફત એકાઉન્ટ બનાવો.",
+        auth_signup_hi: "ખાતું બનાવો",
+        auth_signup_sub: "તમારા ડેશબોર્ડને ઍક્સેસ કરવા માટે નોંધણી કરો.",
+        sec_emergency: "ઇમરજન્સી સંપર્ક ચેતવણીઓ",
+        sec_personal: "વ્યક્તિગત વિગતો",
+        lbl_username: "વપરાશકર્તા નામ",
+        lbl_password: "પાસવર્ડ",
+        lbl_email: "તમારું ઇમેઇલ",
+        lbl_e_email: "પરિવારના સભ્યનું ઇમેઇલ",
+        lbl_e_phone: "પરિવારના સભ્યનો ફોન",
+        lbl_age: "ઉંમર",
+        lbl_gen: "લિંગ",
+        opt_gen_o: "અન્ય", opt_gen_m: "પુરુષ", opt_gen_f: "સ્ત્રી",
+        lbl_med: "મુખ્ય સ્વાસ્થ્ય સ્થિતિ (વૈકલ્પિક)",
+        lbl_allergies: "એલર્જી (વૈકલ્પિક)",
+        ph_username_sign: "વપરાશકર્તા નામ પસંદ કરો",
+        ph_password: "મજબૂત પાસવર્ડ બનાવો",
+        ph_email: "દા.ત. you@example.com",
+        ph_e_email: "દા.ત. family@email.com",
+        ph_e_phone: "દા.ત. 9876543210",
+        ph_age: "34",
+        ph_med: "દા.ત. ડાયાબિટીસ, અસ્થમા",
+        ph_allergies: "દા.ત. મગફળી, પેનિસિલિન",
+        btn_signup_submit: "મફત એકાઉન્ટ બનાવો",
+        txt_have_account: "પહેલેથી જ એકાઉન્ટ છે?",
+        btn_login_link: "સાઇન ઇન કરો"
+      },
+      mr: {
+        hero_title_signup: "स्वास्थ्यसाथीत सामील व्हा",
+        hero_sub_signup: "आजच तुमचे विनामूल्य खाते तयार करा.",
+        auth_signup_hi: "खाते तयार करा",
+        auth_signup_sub: "तुमच्या डॅशबोर्डवर प्रवेश करण्यासाठी खाली नोंदणी करा.",
+        sec_emergency: "आपत्कालीन संपर्क सूचना",
+        sec_personal: "वैयक्तिक तपशील",
+        lbl_username: "वापरकर्तानाव",
+        lbl_password: "पासवर्ड",
+        lbl_email: "तुमचा ईमेल",
+        lbl_e_email: "कुटुंबातील सदस्याचा ईमेल",
+        lbl_e_phone: "कुटुंबातील सदस्याचा फोन",
+        lbl_age: "वय",
+        lbl_gen: "लिंग",
+        opt_gen_o: "इतर", opt_gen_m: "पुरुष", opt_gen_f: "स्त्री",
+        lbl_med: "प्रमुख आरोग्याची स्थिती (पर्यायी)",
+        lbl_allergies: "ऍलर्जी (पर्यायी)",
+        ph_username_sign: "वापरकर्तानाव निवडा",
+        ph_password: "मजबूत पासवर्ड तयार करा",
+        ph_email: "उदा. you@example.com",
+        ph_e_email: "उदा. family@email.com",
+        ph_e_phone: "उदा. 9876543210",
+        ph_age: "34",
+        ph_med: "उदा. मधुमेह, दमा",
+        ph_allergies: "उदा. शेंगदाणे, पेनिसिलिन",
+        btn_signup_submit: "मोफत खाते तयार करा",
+        txt_have_account: "आधीच खाते आहे?",
+        btn_login_link: "साइन इन करा"
+      },
+      ta: {
+        hero_title_signup: "சுவாஸ்த்யசாத்தியில் சேரவும்",
+        hero_sub_signup: "உங்கள் இலவச கணக்கை உருவாக்கவும்.",
+        auth_signup_hi: "கணக்கை உருவாக்கவும்",
+        auth_signup_sub: "டாஷ்போர்டை அணுக கீழே பதிவு செய்யவும்.",
+        sec_emergency: "அவசர தொடர்பு எச்சரிக்கைகள்",
+        sec_personal: "தனிப்பட்ட விவரங்கள்",
+        lbl_username: "பயனர்பெயர்",
+        lbl_password: "கடவுச்சொல்",
+        lbl_email: "உங்கள் மின்னஞ்சல்",
+        lbl_e_email: "குடும்ப உறுப்பினர் மின்னஞ்சல்",
+        lbl_e_phone: "குடும்ப உறுப்பினர் தொலைபேசி",
+        lbl_age: "வயது",
+        lbl_gen: "பாலினம்",
+        opt_gen_o: "மற்றவை", opt_gen_m: "ஆண்", opt_gen_f: "பெண்",
+        lbl_med: "முக்கிய சுகாதார நிலைகள் (விருப்பமானவை)",
+        lbl_allergies: "ஒவ்வாமை (விருப்பமானவை)",
+        ph_username_sign: "பயனர்பெயரை தேர்வு செய்யவும்",
+        ph_password: "வலுவான கடவுச்சொல்லை உருவாக்கவும்",
+        ph_email: "எ.கா. you@example.com",
+        ph_e_email: "எ.கா. family@email.com",
+        ph_e_phone: "எ.கா. 9876543210",
+        ph_age: "34",
+        ph_med: "எ.கா. நீரிழிவு, ஆஸ்துமா",
+        ph_allergies: "எ.கா. வேர்க்கடலை, பென்சிலின்",
+        btn_signup_submit: "இலவச கணக்கை உருவாக்கு",
+        txt_have_account: "ஏற்கனவே கணக்கு உள்ளதா?",
+        btn_login_link: "உள்நுழைய"
+      }
+    };
+
+    function changeLanguage(lang) {
+      localStorage.setItem('swasthya_lang', lang);
+      document.getElementById('langSelect').value = lang;
+      
+      const t = TRANSLATIONS[lang] || TRANSLATIONS.en;
+      
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (t[key]) el.innerText = t[key];
+      });
+      document.querySelectorAll('[data-i18n-ph]').forEach(el => {
+        const key = el.getAttribute('data-i18n-ph');
+        if (t[key]) el.setAttribute('placeholder', t[key]);
+      });
+      document.documentElement.lang = lang;
+    }
+
+    // Initialize Language
+    document.addEventListener("DOMContentLoaded", () => {
+      const savedLang = localStorage.getItem('swasthya_lang') || 'en';
+      changeLanguage(savedLang);
+    });
+  </script>
+</body>
+</html>

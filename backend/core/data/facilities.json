@@ -1,0 +1,8 @@
+[
+  {"id": 1, "name": "District Hospital", "type": "hospital", "distance_km": 2.5, "phone": "108", "address": "Civil Lines, District Center", "availability": "24/7", "lat": 23.0225, "lon": 72.5714},
+  {"id": 2, "name": "Primary Health Centre", "type": "clinic", "distance_km": 1.2, "phone": "+91 98765 43210", "address": "Village Road, Sector 12", "availability": "Open", "lat": 23.0250, "lon": 72.5750},
+  {"id": 3, "name": "Community Health Center", "type": "clinic", "distance_km": 3.8, "phone": "+91 98765 43211", "address": "Old Market Area", "availability": "Open", "lat": 23.0170, "lon": 72.5680},
+  {"id": 4, "name": "Jan Aushadhi Pharmacy", "type": "pharmacy", "distance_km": 0.8, "phone": "+91 98765 43212", "address": "Near Bus Stand", "availability": "Open", "lat": 23.0202, "lon": 72.5780},
+  {"id": 5, "name": "Women & Child Hospital", "type": "hospital", "distance_km": 4.1, "phone": "+91 98765 40001", "address": "Ring Road East", "availability": "24/7", "lat": 23.0321, "lon": 72.5601},
+  {"id": 6, "name": "Emergency Trauma Centre", "type": "hospital", "distance_km": 5.4, "phone": "+91 98765 40002", "address": "Highway Junction", "availability": "24/7", "lat": 23.0410, "lon": 72.5900}
+]

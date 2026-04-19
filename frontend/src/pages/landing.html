@@ -1,0 +1,338 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SwasthyaSaathi - AI Rural Health Assistant</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'core/css/landing.css' %}">
+</head>
+<body>
+
+  <!-- Background Decorative Elements -->
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  
+  <nav class="navbar">
+    <div class="logo">
+      <span class="icon">🩺</span>
+      <span class="text">SwasthyaSaathi</span>
+    </div>
+    <div class="nav-links">
+      <a href="#problem" data-i18n="nav_problem">The Problem</a>
+      <a href="#solution" data-i18n="nav_solution">What To Build</a>
+      <a href="#users" data-i18n="nav_users">Who Uses It</a>
+      <a href="#impact" data-i18n="nav_impact">Why It Matters</a>
+      <select id="langSelect" onchange="changeLanguage(this.value)" style="background: none; border: 1px solid rgba(255,255,255,0.2); color: white; padding: 0.3rem 0.6rem; border-radius: 6px; font-family: inherit; margin-right: 15px; cursor: pointer;">
+        <option value="en" style="color: black;">English</option>
+        <option value="hi" style="color: black;">हिंदी (Hindi)</option>
+        <option value="gu" style="color: black;">ગુજરાતી (Gujarati)</option>
+        <option value="mr" style="color: black;">मराठी (Marathi)</option>
+        <option value="ta" style="color: black;">தமிழ் (Tamil)</option>
+      </select>
+      <a href="{% url 'home' %}" class="cta-nav" data-i18n="nav_try">Try App</a>
+    </div>
+  </nav>
+
+  <main>
+    <section class="hero">
+      <div class="hero-content">
+        <h1 class="gradient-text" data-i18n="hero_h1">AI Rural Health Triage Assistant</h1>
+        <p class="subtitle" data-i18n="hero_p">Directly addressing India's rural healthcare access gap with zero-cost multilingual support — deployable anywhere.</p>
+        <div class="cta-group">
+          <a href="{% url 'home' %}" class="btn primary-btn pulse-glow" data-i18n="hero_btn1">Launch Chatbot</a>
+          <a href="#problem" class="btn secondary-btn" data-i18n="hero_btn2">Learn More</a>
+        </div>
+      </div>
+      <div class="hero-image">
+        <div class="glass-card mockup">
+          <div class="mockup-header">
+            <span>SwasthyaSaathi</span>
+          </div>
+          <div class="mockup-body">
+            <div class="chat-bubble ai">Hello! I'm SwasthyaSaathi. Tell me your symptoms in your language.</div>
+            <div class="chat-bubble user">مجھے ۳ دن سے بخار اور کھانسی ہے (I have fever & cough for 3 days)</div>
+            <div class="chat-bubble ai urgency-visit"><b>VISIT CLINIC</b><br>Based on your symptoms, a clinic visit is recommended within 24 hours. Here are nearby facilities...</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="problem" class="section glass-panel">
+      <div class="section-badge" data-i18n="prob_badge">The Reality</div>
+      <h2 class="section-title" data-i18n="prob_title">THE PROBLEM</h2>
+      <p class="section-lead" data-i18n="prob_lead">Millions of rural Indians visit overloaded Outpatient Departments (OPDs) for issues that could be handled remotely.</p>
+      
+      <div class="grid cards-grid">
+        <div class="info-card warning">
+          <div class="icon">🚫</div>
+          <h3 data-i18n="prob_c1_h">No Symptom Assessment</h3>
+          <p data-i18n="prob_c1_p">ASHA workers and patients have no way to assess how urgent a symptom is before travelling long distances to a hospital.</p>
+        </div>
+        <div class="info-card warning">
+          <div class="icon">🗣️</div>
+          <h3 data-i18n="prob_c2_h">Language Barrier</h3>
+          <p data-i18n="prob_c2_p">Most existing health chatbots are in English only — completely unusable for rural populations who speak Hindi, Gujarati, Marathi, or Tamil.</p>
+        </div>
+        <div class="info-card warning">
+          <div class="icon">🏥</div>
+          <h3 data-i18n="prob_c3_h">Overloaded Hospitals</h3>
+          <p data-i18n="prob_c3_p">No tool exists to distinguish between self-care, a clinic visit, or an emergency. Overloaded OPDs can't focus on real emergencies because they handle cases that shouldn't be there.</p>
+        </div>
+      </div>
+      <p class="impact-statement"><strong data-i18n="prob_res_str">The result:</strong> <span data-i18n="prob_res_p">Preventable deaths from missed emergencies, and avoidable OPD collapse from non-urgent cases with nowhere else to go.</span></p>
+    </section>
+
+    <section id="solution" class="section">
+      <div class="section-badge" data-i18n="sol_badge">The Solution</div>
+      <h2 class="section-title" data-i18n="sol_title">WHAT TO BUILD</h2>
+      <div class="solution-content">
+        <div class="feature-list">
+          <div class="feature-item">
+            <div class="check">✅</div>
+            <div>
+              <h3 data-i18n="sol_f1_h">Multilingual Voice & Text Input</h3>
+              <p data-i18n="sol_f1_p">Accepts symptom input in voice or text across regional languages (Hindi, Gujarati, Marathi, Tamil, English).</p>
+            </div>
+          </div>
+          <div class="feature-item">
+            <div class="check">✅</div>
+            <div>
+              <h3 data-i18n="sol_f2_h">Rule-Based AI Classification</h3>
+              <p data-i18n="sol_f2_p">Uses an advanced health engine to classify urgency into three precise tiers: Self-care, Visit clinic, or Emergency.</p>
+            </div>
+          </div>
+          <div class="feature-item">
+            <div class="check">✅</div>
+            <div>
+              <h3 data-i18n="sol_f3_h">Smart Facility Routing</h3>
+              <p data-i18n="sol_f3_p">Automatically recommends the nearest appropriate healthcare facility from a database of Primary Health Centres (PHCs) and hospitals.</p>
+            </div>
+          </div>
+          <div class="feature-item">
+            <div class="check">✅</div>
+            <div>
+              <h3 data-i18n="sol_f4_h">Zero-Friction Access</h3>
+              <p data-i18n="sol_f4_p">Works immediately on any mobile browser or WhatsApp with absolutely no app installation required.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="users" class="section glass-panel alternate">
+      <div class="section-badge" data-i18n="usr_badge">Target Audience</div>
+      <h2 class="section-title" data-i18n="usr_title">WHO USES IT</h2>
+      <div class="grid users-grid">
+        <div class="user-card">
+          <div class="user-icon">👨‍👩‍👧‍👦</div>
+          <h3 data-i18n="usr_u1_h">Rural Patients</h3>
+          <p data-i18n="usr_u1_p">Evaluating symptoms from home and assessing whether the travel time and cost to a facility are necessary.</p>
+        </div>
+        <div class="user-card">
+          <div class="user-icon">👩‍⚕️</div>
+          <h3 data-i18n="usr_u2_h">ASHA Workers</h3>
+          <p data-i18n="usr_u2_p">Equipping frontline village health workers to quickly triage patients on behalf of their communities.</p>
+        </div>
+        <div class="user-card">
+          <div class="user-icon">📊</div>
+          <h3 data-i18n="usr_u3_h">District Administrators</h3>
+          <p data-i18n="usr_u3_p">Monitoring regional triage trends, identifying outbreak clusters, and allocating medical resources efficiently.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="impact" class="section">
+      <div class="section-badge" data-i18n="imp_badge">Why We Do This</div>
+      <h2 class="section-title" data-i18n="imp_title">WHY IT MATTERS</h2>
+      <div class="impact-stats">
+        <div class="stat">
+          <div class="number">1:1000</div>
+          <div class="label" data-i18n="imp_s1_h">Rural Doctor to Citizen Ratio</div>
+          <p data-i18n="imp_s1_p">The gap is an information problem, not just a medical one.</p>
+        </div>
+        <div class="stat">
+          <div class="number" data-i18n="imp_s2_n">Zero Cost</div>
+          <div class="label" data-i18n="imp_s2_h">Deployment Cost per user</div>
+          <p data-i18n="imp_s2_p">A chatbot that speaks Hindi and knows chest pain is an emergency costs nothing to scale.</p>
+        </div>
+      </div>
+      <div class="impact-conclusion">
+        <p data-i18n="imp_conc">An AI-powered symptom checker could deflect thousands of non-urgent OPD visits per month, saving resources to treat genuine emergencies.</p>
+      </div>
+      <div class="final-cta">
+        <a href="{% url 'home' %}" class="btn primary-btn large pulse-glow" data-i18n="imp_btn">Experience SwasthyaSaathi Now</a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <div class="logo">🩺 SwasthyaSaathi</div>
+      <p data-i18n="ft_p">Empowering rural India with accessible, multilingual health triage.</p>
+    </div>
+  </footer>
+
+  <script>
+    const TRANSLATIONS = {
+      en: {
+        nav_problem: "The Problem", nav_solution: "What To Build", nav_users: "Who Uses It", nav_impact: "Why It Matters", nav_try: "Try App",
+        hero_h1: "AI Rural Health Triage Assistant",
+        hero_p: "Directly addressing India's rural healthcare access gap with zero-cost multilingual support — deployable anywhere.",
+        hero_btn1: "Launch Chatbot", hero_btn2: "Learn More",
+        prob_badge: "The Reality", prob_title: "THE PROBLEM",
+        prob_lead: "Millions of rural Indians visit overloaded Outpatient Departments (OPDs) for issues that could be handled remotely.",
+        prob_c1_h: "No Symptom Assessment", prob_c1_p: "ASHA workers and patients have no way to assess how urgent a symptom is before travelling long distances to a hospital.",
+        prob_c2_h: "Language Barrier", prob_c2_p: "Most existing health chatbots are in English only — completely unusable for rural populations who speak Hindi, Gujarati, Marathi, or Tamil.",
+        prob_c3_h: "Overloaded Hospitals", prob_c3_p: "No tool exists to distinguish between self-care, a clinic visit, or an emergency. Overloaded OPDs can't focus on real emergencies because they handle cases that shouldn't be there.",
+        prob_res_str: "The result:", prob_res_p: "Preventable deaths from missed emergencies, and avoidable OPD collapse from non-urgent cases with nowhere else to go.",
+        sol_badge: "The Solution", sol_title: "WHAT TO BUILD",
+        sol_f1_h: "Multilingual Voice & Text Input", sol_f1_p: "Accepts symptom input in voice or text across regional languages (Hindi, Gujarati, Marathi, Tamil, English).",
+        sol_f2_h: "Rule-Based AI Classification", sol_f2_p: "Uses an advanced health engine to classify urgency into three precise tiers: Self-care, Visit clinic, or Emergency.",
+        sol_f3_h: "Smart Facility Routing", sol_f3_p: "Automatically recommends the nearest appropriate healthcare facility from a database of Primary Health Centres (PHCs) and hospitals.",
+        sol_f4_h: "Zero-Friction Access", sol_f4_p: "Works immediately on any mobile browser or WhatsApp with absolutely no app installation required.",
+        usr_badge: "Target Audience", usr_title: "WHO USES IT",
+        usr_u1_h: "Rural Patients", usr_u1_p: "Evaluating symptoms from home and assessing whether the travel time and cost to a facility are necessary.",
+        usr_u2_h: "ASHA Workers", usr_u2_p: "Equipping frontline village health workers to quickly triage patients on behalf of their communities.",
+        usr_u3_h: "District Administrators", usr_u3_p: "Monitoring regional triage trends, identifying outbreak clusters, and allocating medical resources efficiently.",
+        imp_badge: "Why We Do This", imp_title: "WHY IT MATTERS",
+        imp_s1_h: "Rural Doctor to Citizen Ratio", imp_s1_p: "The gap is an information problem, not just a medical one.",
+        imp_s2_n: "Zero Cost", imp_s2_h: "Deployment Cost per user", imp_s2_p: "A chatbot that speaks Hindi and knows chest pain is an emergency costs nothing to scale.",
+        imp_conc: "An AI-powered symptom checker could deflect thousands of non-urgent OPD visits per month, saving resources to treat genuine emergencies.",
+        imp_btn: "Experience SwasthyaSaathi Now",
+        ft_p: "Empowering rural India with accessible, multilingual health triage."
+      },
+      hi: {
+        nav_problem: "समस्या", nav_solution: "समाधान", nav_users: "उपयोगकर्ता", nav_impact: "प्रभाव", nav_try: "ऐप आज़माएँ",
+        hero_h1: "AI ग्रामीण स्वास्थ्य मूल्यांकन सहायक",
+        hero_p: "बिना किसी कीमत के बहुभाषी सहायता के साथ भारत की ग्रामीण स्वास्थ्य सेवा की पहुंच की समस्या को दूर करना।",
+        hero_btn1: "चैटबॉट लॉन्च करें", hero_btn2: "और जानें",
+        prob_badge: "वास्तविकता", prob_title: "समस्या",
+        prob_lead: "लाखों ग्रामीण भारतीय उन समस्याओं के लिए अस्पतालों का दौरा करते हैं जिन्हें घर से हल किया जा सकता है।",
+        prob_c1_h: "लक्षणों का कोई मूल्यांकन नहीं", prob_c1_p: "आशा कार्यकर्ताओं और मरीजों के पास अस्पताल जाने से पहले यह जानने का कोई तरीका नहीं है कि कोई लक्षण कितना जरूरी है।",
+        prob_c2_h: "भाषा की बाधा", prob_c2_p: "अधिकांश स्वास्थ्य चैटबॉट केवल अंग्रेजी में हैं - ग्रामीण आबादी के लिए अनुपयोगी।",
+        prob_c3_h: "भीड़भाड़ वाले अस्पताल", prob_c3_p: "स्व-देखभाल, क्लिनिक जाने या आपात स्थिति के बीच अंतर करने के लिए कोई उपकरण उपलब्ध नहीं है।",
+        prob_res_str: "परिणाम:", prob_res_p: "छूटी हुई आपात स्थितियों से रोकी जा सकने वाली मौतें, और अस्पतालों पर अनावश्यक बोझ।",
+        sol_badge: "समाधान", sol_title: "हम क्या बना रहे हैं",
+        sol_f1_h: "बहुभाषी वॉयस और टेक्स्ट", sol_f1_p: "क्षेत्रीय भाषाओं (हिंदी, गुजराती, मराठी, तमिल, अंग्रेजी) में लक्षणों को स्वीकार करता है।",
+        sol_f2_h: "नियम-आधारित AI वर्गीकरण", sol_f2_p: "स्थिति को तीन सटीक स्तरों में वर्गीकृत करता है: स्व-देखभाल, क्लिनिक जाएं, या आपातकाल।",
+        sol_f3_h: "स्मार्ट अस्पताल नेविगेशन", sol_f3_p: "स्वचालित रूप से आपके निकटतम उपयुक्त स्वास्थ्य सुविधा की सिफारिश करता है।",
+        sol_f4_h: "कोई इंस्टालेशन नहीं", sol_f4_p: "यह किसी भी मोबाइल ब्राउज़र या व्हाट्सएप पर तुरंत काम करता है।",
+        usr_badge: "लक्षित दर्शक", usr_title: "इसका उपयोग कौन करता है",
+        usr_u1_h: "ग्रामीण मरीज", usr_u1_p: "घर से लक्षणों का मूल्यांकन करना और यह तय करना कि क्या अस्पताल जाना आवश्यक है।",
+        usr_u2_h: "आशा (ASHA) कार्यकर्ता", usr_u2_p: "ग्रामीण स्वास्थ्य कर्मियों को मरीजों की शीघ्र जाँच करने के लिए सशक्त बनाना।",
+        usr_u3_h: "जिला प्रशासक", usr_u3_p: "बीमारियों पर नज़र रखना तथा चिकित्सा संसाधनों का कुशलतापूर्वक आवंटन करना।",
+        imp_badge: "हम ऐसा क्यों करते हैं", imp_title: "यह क्यों मायने रखता है",
+        imp_s1_h: "ग्रामीण डॉक्टर और नागरिक अनुपात", imp_s1_p: "यह अंतर केवल चिकित्सीय नहीं, बल्कि जानकारी की समस्या भी है।",
+        imp_s2_n: "शून्य लागत", imp_s2_h: "प्रति उपयोगकर्ता तैनाती लागत", imp_s2_p: "हिंदी बोलने वाले और छाती के दर्द को पहचानने वाले चैटबॉट को बढ़ाने में कोई लागत नहीं आती।",
+        imp_conc: "यह चैटबॉट हर महीने हजारों अनावश्यक अस्पताल दौरों को कम कर सकता है।",
+        imp_btn: "आज ही स्वास्थ्यसाथी का अनुभव लें",
+        ft_p: "ग्रामीण भारत को सुलभ, बहुभाषी स्वास्थ्य मूल्यांकन के साथ सशक्त बनाना।"
+      },
+      gu: {
+        nav_problem: "સમસ્યા", nav_solution: "ઉકેલ", nav_users: "વપરાશકર્તાઓ", nav_impact: "અસર", nav_try: "એપ અજમાવો",
+        hero_h1: "AI ગ્રામીણ આરોગ્ય સહાયક",
+        hero_p: "શૂન્ય ખર્ચે બહુભાષી સપોર્ટ સાથે ગ્રામીણ ભારતની આરોગ્યસંભાળની સમસ્યાને હલ કરવી.",
+        hero_btn1: "ચેટબોટ શરૂ કરો", hero_btn2: "વધુ જાણો",
+        prob_badge: "વાસ્તવિકતા", prob_title: "સમસ્યા",
+        prob_lead: "લાખો ગ્રામીણ ભારતીયો નાની સમસ્યાઓ માટે હોસ્પિટલ જાય છે જે ઘરે ઉકેલી શકાય છે.",
+        prob_c1_h: "લક્ષણોનું કોઈ મૂલ્યાંકન નથી", prob_c1_p: "હોસ્પિટલ જતા પહેલા દર્દીને કેટલી જરૂર છે તે જાણવાની કોઈ રીત નથી.",
+        prob_c2_h: "ભાષાની અડચણ", prob_c2_p: "મોટાભાગના હેલ્થ ચેટબોટ્સ માત્ર અંગ્રેજીમાં જ છે.",
+        prob_c3_h: "ભીડભાડવાળી હોસ્પિટલો", prob_c3_p: "ઇમરજન્સી અને સામાન્ય બિમારી વચ્ચે તફાવત બતાવવા માટે કોઈ સાધન નથી.",
+        prob_res_str: "પરિણામ:", prob_res_p: "ચૂકી ગયેલી ઇમરજન્સી અને હોસ્પિટલો પર બિનજરૂરી બોજ.",
+        sol_badge: "ઉકેલ", sol_title: "અમે શું બનાવી રહ્યા છીએ",
+        sol_f1_h: "બહુભાષી અવાજ અને ટેક્સ્ટ", sol_f1_p: "પ્રાદેશિક ભાષાઓમાં લક્ષણો સ્વીકારે છે.",
+        sol_f2_h: "AI વર્ગીકરણ", sol_f2_p: "ઇમરજન્સીને ત્રણ ભાગમાં વહેંચે છે: સ્વ-સંભાળ, ક્લિનિક અથવા ઇમરજન્સી.",
+        sol_f3_h: "સ્માર્ટ હોસ્પિટલ નેવિગેશન", sol_f3_p: "નજીકની હોસ્પિટલની ભલામણ કરે છે.",
+        sol_f4_h: "ઇન્સ્ટોલેશનની જરૂર નથી", sol_f4_p: "કોઈપણ બ્રાઉઝર અથવા WhatsApp પર તરત જ કામ કરે છે.",
+        usr_badge: "દર્શક", usr_title: "તેનો ઉપયોગ કોણ કરે છે",
+        usr_u1_h: "ગ્રામીણ દર્દીઓ", usr_u1_p: "લક્ષણોનું મૂલ્યાંકન કરવા માટે.",
+        usr_u2_h: "ASHA કાર્યકર્તા", usr_u2_p: "દર્દીઓની ઝડપથી તપાસ કરવા માટે.",
+        usr_u3_h: "જિલ્લા વહીવટકર્તાઓ", usr_u3_p: "રોગો પર નજર રાખવા માટે.",
+        imp_badge: "શા માટે", imp_title: "તે શા માટે મહત્વનું છે",
+        imp_s1_h: "ગ્રામીણ ડોક્ટરથી નાગરિક ગુણોત્તર", imp_s1_p: "આ માત્ર તબીબી બાબત નથી, પણ માહિતીનો અભાવ છે.",
+        imp_s2_n: "શૂન્ય કિંમત", imp_s2_h: "વપરાશકર્તા માટે ખર્ચ", imp_s2_p: "અમર્યાદિત લોકો મફતમાં ઉપયોગ કરી શકે છે.",
+        imp_conc: "આ ચેટબોટ બિનજરૂરી હોસ્પિટલ મુલાકાતો ઘટાડી શકે છે.",
+        imp_btn: "સ્વાસ્થ્યસાથીનો અનુભવ કરો",
+        ft_p: "ગ્રામીણ ભારતને સશક્ત બનાવતું ઍક્સેસિબલ માર્ગદર્શન."
+      },
+      mr: {
+        nav_problem: "समस्या", nav_solution: "उपाय", nav_users: "वापरकर्ते", nav_impact: "प्रभाव", nav_try: "अॅप वापरून पहा",
+        hero_h1: "AI ग्रामीण आरोग्य सहाय्यक",
+        hero_p: "शून्य खर्चात बहुभाषिक समर्थनासह भारताच्या ग्रामीण आरोग्यसेवेची समस्या सोडवणे.",
+        hero_btn1: "चॅटबॉट सुरू करा", hero_btn2: "अधिक जाणून घ्या",
+        prob_badge: "वास्तव", prob_title: "समस्या",
+        prob_lead: "लाखो ग्रामीण भारतीय अशा समस्यांसाठी रुग्णालयात जातात ज्या घरबसल्या सोडवता येतात.",
+        prob_c1_h: "लक्षणांचे मूल्यांकन नाही", prob_c1_p: "रुग्णालयात जाण्यापूर्वी लक्षणे किती गंभीर आहेत हे तपासण्याचा कोणताही मार्ग नाही.",
+        prob_c2_h: "भाषेचा अडथळा", prob_c2_p: "बहुतेक हेल्थ चॅटबॉट्स फक्त इंग्रजीत आहेत.",
+        prob_c3_h: "गर्दी असलेली रुग्णालये", prob_c3_p: "आणीबाणी आणि सामान्य आजारांमधील फरक सांगण्यासाठी कोणतेही साधन नाही.",
+        prob_res_str: "परिणाम:", prob_res_p: "रुग्णालयांवरील अनावश्यक दबाव.",
+        sol_badge: "उपाय", sol_title: "आम्ही काय बनवत आहोत",
+        sol_f1_h: "बहुभाषिक व्हॉइस आणि मजकूर", sol_f1_p: "प्रादेशिक भाषांमध्ये लक्षणे स्वीकारतो.",
+        sol_f2_h: "AI वर्गीकरण", sol_f2_p: "आणीबाणीचे तीन भाग करते: स्वत:ची काळजी, क्लिनिक किंवा आणीबाणी.",
+        sol_f3_h: "स्मार्ट हॉस्पिटल नेव्हिगेशन", sol_f3_p: "जवळच्या रुग्णालयाची शिफारस करते.",
+        sol_f4_h: "इन्स्टॉलेशनची गरज नाही", sol_f4_p: "कोणत्याही ब्राउझर किंवा व्हॉट्सअॅपवर काम करते.",
+        usr_badge: "प्रेक्षक", usr_title: "हे कोण वापरते",
+        usr_u1_h: "ग्रामीण रुग्ण", usr_u1_p: "घरबसल्या लक्षणांचे मूल्यांकन करण्यासाठी.",
+        usr_u2_h: "आशा (ASHA) कार्यकर्त्या", usr_u2_p: "रुग्णांची त्वरित तपासणी करण्यासाठी.",
+        usr_u3_h: "जिल्हा प्रशासक", usr_u3_p: "आजारांवर लक्ष ठेवण्यासाठी.",
+        imp_badge: "का", imp_title: "हे का महत्त्वाचे आहे",
+        imp_s1_h: "ग्रामीण डॉक्टर ते नागरिक गुणोत्तर", imp_s1_p: "हा केवळ वैद्यकीय अभाव नाही तर माहितीचा अभाव आहे.",
+        imp_s2_n: "शून्य खर्च", imp_s2_h: "प्रति व्यक्ती खर्च", imp_s2_p: "मराठी बोलणारा चॅटबॉट मोफत वापरता येतो.",
+        imp_conc: "हा चॅटबॉट रुग्णालयातील अनावश्यक फेऱ्या कमी करू शकतो.",
+        imp_btn: "स्वास्थ्यसाथीचा अनुभव घ्या",
+        ft_p: "ग्रामीण भारताला सुलभ आरोग्य मार्गदर्शनाने सक्षम करणे."
+      },
+      ta: {
+        nav_problem: "பிரச்சனை", nav_solution: "தீர்வு", nav_users: "பயனர்கள்", nav_impact: "தாக்கம்", nav_try: "செயலியை முயற்சி செய்",
+        hero_h1: "AI கிராமப்புற சுகாதார உதவியாளர்",
+        hero_p: "இலவச பன்மொழி ஆதரவுடன் இந்தியாவின் கிராமப்புற சுகாதார அணுகல் இடைவெளியை நிவர்த்தி செய்தல்.",
+        hero_btn1: "சாட்பாட்டைத் தொடங்கு", hero_btn2: "மேலும் அறிக",
+        prob_badge: "உண்மை", prob_title: "பிரச்சனை",
+        prob_lead: "வீட்டிலேயே தீர்க்கக்கூடிய பிரச்சனைகளுக்காக கிராமப்புற இந்தியர்கள் மருத்துவமனைகளுக்குச் செல்கின்றனர்.",
+        prob_c1_h: "அறிகுறி மதிப்பீடு இல்லை", prob_c1_p: "மருத்துவமனைக்குச் செல்வதற்கு முன், எவ்வளவு அவசரம் என்பதை அறிய எந்த வழியும் இல்லை.",
+        prob_c2_h: "மொழித் தடை", prob_c2_p: "பெரும்பாலான சுகாதார சாட்பாட்கள் ஆங்கிலத்தில் மட்டுமே உள்ளன.",
+        prob_c3_h: "அதிகப்படியான கூட்டம்", prob_c3_p: "சுய பராமரிப்பு, கிளினிக் வருகை அல்லது அவசரநிலை ஆகியவற்றுக்கு இடையே வேறுபடுத்துவதற்கு எந்த கருவியும் இல்லை.",
+        prob_res_str: "முடிவு:", prob_res_p: "தடுக்கக்கூடிய இறப்புகள் மற்றும் மருத்துவமனைகளில் தேவையற்ற சுமை.",
+        sol_badge: "தீர்வு", sol_title: "நாங்கள் என்ன உருவாக்குகிறோம்",
+        sol_f1_h: "பன்மொழி குரல் & உரை", sol_f1_p: "பிராந்திய மொழிகளில் அறிகுறிகளை ஏற்றுக்கொள்கிறது.",
+        sol_f2_h: "AI வகைப்பாடு", sol_f2_p: "மூன்று துல்லியமான அடுக்குகளாக அவசரத்தை வகைப்படுத்துகிறது.",
+        sol_f3_h: "சிறந்த மருத்துவமனை பரிந்துரை", sol_f3_p: "அருகிலுள்ள பொருத்தமான சுகாதார மையத்தை தானாகவே பரிந்துரைக்கிறது.",
+        sol_f4_h: "நிறுவல் தேவையில்லை", sol_f4_p: "எந்தவொரு மொபைல் உலாவி அல்லது வாட்ஸ்அப்பிலும் உடனடியாக வேலை செய்கிறது.",
+        usr_badge: "பார்வையாளர்கள்", usr_title: "யார் இதைப் பயன்படுத்துகிறார்கள்",
+        usr_u1_h: "கிராமப்புற நோயாளிகள்", usr_u1_p: "வீட்டிலிருந்து அறிகுறிகளை மதிப்பீடு செய்ய.",
+        usr_u2_h: "ஆஷா (ASHA) தொழிலாளர்கள்", usr_u2_p: "கிராமங்களில் விரைவில் நோயாளிகளை பரிசோதிக்க.",
+        usr_u3_h: "மாவட்ட நிர்வாகிகள்", usr_u3_p: "நோய்களைக் கண்காணிக்க.",
+        imp_badge: "ஏன்", imp_title: "ஏன் இது முக்கியம்",
+        imp_s1_h: "மருத்துவர் மற்றும் குடிமக்கள் விகிதம்", imp_s1_p: "இது ஒரு தகவல் தொடர்பு பிரச்சனை.",
+        imp_s2_n: "பூஜ்ஜிய செலவு", imp_s2_h: "பயனருக்கு செலவு", imp_s2_p: "தமிழ் பேசும் சாட்பாட்டை இலவசமாக பயன்படுத்தலாம்.",
+        imp_conc: "இந்த சாட்பாட் தேவையற்ற மருத்துவமனை வருகைகளைக் குறைக்கும்.",
+        imp_btn: "சுவாஸ்த்யசாத்தியை இப்போது அனுபவிக்கவும்",
+        ft_p: "மருத்துவ வழிகாட்டுதல் மூலம் கிராமப்புற இந்தியாவை மேம்படுத்துகிறது."
+      }
+    };
+
+    function changeLanguage(lang) {
+      localStorage.setItem('swasthya_lang', lang);
+      document.getElementById('langSelect').value = lang;
+      
+      const t = TRANSLATIONS[lang] || TRANSLATIONS.en;
+      
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (t[key]) el.innerHTML = t[key];
+      });
+      document.documentElement.lang = lang;
+    }
+
+    // Initialize Language
+    document.addEventListener("DOMContentLoaded", () => {
+      const savedLang = localStorage.getItem('swasthya_lang') || 'en';
+      changeLanguage(savedLang);
+    });
+  </script>
+</body>
+</html>

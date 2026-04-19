@@ -1,0 +1,39 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Dashboard Access</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Outfit', sans-serif; background: linear-gradient(135deg, #f8fafc, #eef2f6); height: 100vh; display: flex; align-items: center; justify-content: center; margin: 0; }
+    .card { background: white; padding: 2.5rem; border-radius: 24px; box-shadow: 0 15px 50px -10px rgba(0,0,0,0.1); width: 100%; max-width: 380px; text-align: center; border: 1px solid rgba(0,0,0,0.05); }
+    .icon { font-size: 3rem; margin-bottom: 1rem; }
+    input { width: 100%; padding: 14px; margin: 8px 0; border: 2px solid #e2e8f0; border-radius: 14px; box-sizing: border-box; font-family: inherit; font-size: 0.95rem; transition: 0.2s; }
+    input:focus { outline: none; border-color: #3b82f6; box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1); }
+    button { width: 100%; padding: 14px; background: #3b82f6; color: white; font-weight: 600; border: none; border-radius: 14px; cursor: pointer; transition: 0.2s; font-family: inherit; font-size: 1.05rem; margin-top: 12px; }
+    button:hover { background: #2563eb; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(37, 99, 235, 0.25); }
+    .error { background: #fef2f2; color: #ef4444; border-radius: 12px; padding: 12px; font-size: 0.9rem; margin-bottom: 1.5rem; border: 1px solid #fee2e2; font-weight: 500;}
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="icon">🔒</div>
+    <h2 style="margin-top: 0; color: #0f172a; font-weight: 700; margin-bottom: 0.5rem; font-size: 1.8rem;">Admin Portal</h2>
+    <p style="color: #64748b; font-size: 0.95rem; margin-bottom: 1.5rem;">Enter your confidential credentials.</p>
+    
+    {% if error %}
+      <div class="error">⚠️ {{ error }}</div>
+    {% endif %}
+    
+    <form method="post">
+      {% csrf_token %}
+      <input type="text" name="username" placeholder="Username" required autofocus autocomplete="off">
+      <input type="password" name="password" placeholder="Password" required>
+      <button type="submit">Unlock Dashboard</button>
+    </form>
+    
+    <a href="{% url 'home' %}" style="display: block; margin-top: 2rem; color: #64748b; text-decoration: none; font-size: 0.95rem; font-weight: 600; transition: color 0.2s;">⬅ Return to safe area</a>
+  </div>
+</body>
+</html>

@@ -1,0 +1,227 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard - SwasthyaSaathi</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --card-bg: rgba(255, 255, 255, 0.85);
+      --text: #0f172a;
+      --muted: #64748b;
+      --primary: #0d9488;
+      --secondary: #3b82f6;
+    }
+    body {
+      margin: 0; font-family: 'Outfit', sans-serif;
+      background: linear-gradient(135deg, #f8fafc 0%, #eef2f6 100%);
+      color: var(--text); min-height: 100vh;
+      display: flex; flex-direction: column;
+    }
+    .topbar {
+      background: white; padding: 1rem 2rem;
+      display: flex; justify-content: space-between; align-items: center;
+      box-shadow: 0 4px 20px -5px rgba(0,0,0,0.05);
+      position: sticky; top: 0; z-index: 100;
+    }
+    .topbar h1 { margin: 0; font-size: 1.5rem; font-weight: 700; color: var(--primary); display: flex; align-items: center; gap: 10px; }
+    .back-btn {
+      padding: 0.5rem 1rem; border-radius: 12px; background: #e2e8f0; color: var(--text);
+      text-decoration: none; font-weight: 600; transition: all 0.2s;
+    }
+    .back-btn:hover { background: #cbd5e1; transform: translateY(-1px); }
+    
+    .container {
+      padding: 2rem; max-width: 1400px; margin: 0 auto; width: 100%; box-sizing: border-box;
+    }
+    
+    .stats-row {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;
+    }
+    .stat-card {
+      background: var(--card-bg); border-radius: 20px; padding: 1.5rem;
+      box-shadow: 0 10px 40px -10px rgba(0,0,0,0.05);
+      backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.5);
+      display: flex; flex-direction: column; justify-content: center;
+    }
+    .stat-value { font-size: 2.5rem; font-weight: 800; color: var(--primary); line-height: 1; }
+    .stat-label { font-size: 0.95rem; font-weight: 600; color: var(--muted); margin-top: 0.5rem; text-transform: uppercase; letter-spacing: 0.05em; }
+
+    .charts-row {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2rem;
+    }
+    @media (max-width: 900px) { .charts-row { grid-template-columns: 1fr; } }
+    
+    .chart-panel {
+      background: var(--card-bg); border-radius: 24px; padding: 1.5rem;
+      box-shadow: 0 15px 50px -10px rgba(0,0,0,0.08);
+      backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.5);
+    }
+    .chart-panel h2 { margin: 0 0 1.5rem 0; font-size: 1.25rem; font-weight: 700; color: var(--text); }
+    .chart-container { position: relative; height: 320px; width: 100%; }
+
+    .table-panel {
+      background: var(--card-bg); border-radius: 24px; padding: 1.5rem;
+      box-shadow: 0 15px 50px -10px rgba(0,0,0,0.08);
+      backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.5);
+      overflow-x: auto;
+    }
+    .table-panel h2 { margin: 0 0 1rem 0; font-size: 1.25rem; font-weight: 700; }
+    table { width: 100%; border-collapse: collapse; text-align: left; }
+    th { padding: 1rem; color: var(--muted); font-weight: 600; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 2px solid #e2e8f0; }
+    td { padding: 1rem; border-bottom: 1px solid #f1f5f9; font-size: 0.95rem; font-weight: 500; }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: rgba(255,255,255,0.5); }
+    .badge { padding: 0.3rem 0.8rem; border-radius: 999px; font-size: 0.8rem; font-weight: 700; background: #e0f2fe; color: var(--secondary); display: inline-block; white-space: nowrap;}
+  </style>
+</head>
+<body>
+
+  <header class="topbar">
+    <h1>📊 Regional Analytics Dashboard</h1>
+    <div style="display: flex; gap: 10px;">
+      <a href="{% url 'export_patients_csv' %}" class="back-btn" style="background: var(--primary); color: white;">📥 Export Data (CSV)</a>
+      <a href="{% url 'home' %}" class="back-btn">⬅ Back to App</a>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-value">{{ total_patients }}</div>
+        <div class="stat-label">Total Patients Tracked</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="top-area-val">-</div>
+        <div class="stat-label">Most Active Area</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="top-cond-val">-</div>
+        <div class="stat-label">Top Condition</div>
+      </div>
+    </div>
+
+    <div class="charts-row">
+      <div class="chart-panel">
+        <h2>Patients by Village / Area</h2>
+        <div class="chart-container">
+          <canvas id="villageChart"></canvas>
+        </div>
+      </div>
+      
+      <div class="chart-panel">
+        <h2>Most Common Conditions</h2>
+        <div class="chart-container">
+          <canvas id="conditionChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="table-panel">
+      <h2>Recent Patient Uploads</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Name</th>
+            <th>Age/Gender</th>
+            <th>Village</th>
+            <th>Condition / Symptoms</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for p in recent_patients %}
+          <tr>
+            <td style="color:var(--muted); font-size:0.85rem;">{{ p.date }}</td>
+            <td style="font-weight: 600;">{{ p.name }}</td>
+            <td>{{ p.age }} • {{ p.gender }}</td>
+            <td><span class="badge">{{ p.village }}</span></td>
+            <td>{{ p.condition }}</td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="5" style="text-align: center; color: var(--muted);">No patients uploaded yet.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+  <script>
+    const villageLabels = {{ village_labels|safe }};
+    const villageData = {{ village_data|safe }};
+    const conditionLabels = {{ condition_labels|safe }};
+    const conditionData = {{ condition_data|safe }};
+
+    // Calculate Top Stats dynamically
+    if (villageLabels.length > 0) {
+      document.getElementById('top-area-val').textContent = villageLabels[0];
+    }
+    if (conditionLabels.length > 0) {
+      document.getElementById('top-cond-val').textContent = conditionLabels[0];
+    }
+
+    Chart.defaults.font.family = "'Outfit', sans-serif";
+    Chart.defaults.color = "#64748b";
+    
+    // Smooth custom rich colors
+    const colors = [
+      'rgba(13, 148, 136, 0.8)',
+      'rgba(59, 130, 246, 0.8)',
+      'rgba(245, 158, 11, 0.8)',
+      'rgba(239, 68, 68, 0.8)',
+      'rgba(139, 92, 246, 0.8)',
+      'rgba(16, 185, 129, 0.8)',
+    ];
+
+    // Village Doughnut Chart
+    new Chart(document.getElementById('villageChart'), {
+      type: 'doughnut',
+      data: {
+        labels: villageLabels,
+        datasets: [{
+          data: villageData,
+          backgroundColor: colors,
+          borderWidth: 0,
+          hoverOffset: 4
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { position: 'right', labels: { boxWidth: 12, padding: 15, font: {weight: '600'} } }
+        },
+        cutout: '65%'
+      }
+    });
+
+    // Conditions Bar Chart
+    new Chart(document.getElementById('conditionChart'), {
+      type: 'bar',
+      data: {
+        labels: conditionLabels,
+        datasets: [{
+          label: 'Number of Patients',
+          data: conditionData,
+          backgroundColor: 'rgba(59, 130, 246, 0.8)',
+          borderRadius: 8,
+          borderSkipped: false
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+          y: { beginAtZero: true, grid: { color: 'rgba(0,0,0,0.05)' }, ticks: { stepSize: 1, font: {weight: '600'} } },
+          x: { grid: { display: false }, ticks: { font: {weight: '600'} } }
+        }
+      }
+    });
+  </script>
+</body>
+</html>

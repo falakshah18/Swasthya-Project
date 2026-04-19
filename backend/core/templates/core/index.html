@@ -1,0 +1,402 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SwasthyaSaathi</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'core/css/style.css' %}">
+</head>
+<body>
+  <div class="layout-shell">
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <div class="brand-icon">🩺</div>
+        <div class="brand-text">
+          <h1 id="app-title">SwasthyaSaathi</h1>
+          <p id="tagline">AI rural health triage assistant</p>
+        </div>
+      </div>
+
+      <div class="desktop-hint" id="desktop-hint">Works on full desktop and mobile screens</div>
+
+      <div class="language-card panel">
+        <label for="language-select" class="section-caption">Language</label>
+        <select id="language-select" class="language-select">
+          <option value="en">English</option>
+          <option value="hi">हिन्दी</option>
+          <option value="gu">ગુજરાતી</option>
+          <option value="mr">मराठी</option>
+          <option value="ta">தமிழ்</option>
+        </select>
+      </div>
+
+      <nav class="side-nav">
+        <button class="nav-btn active" data-screen="chat">💬 <span data-label="chat">Chat</span></button>
+        <button class="nav-btn" data-screen="nearby">📍 <span data-label="nearby">Nearby Care</span></button>
+        <button class="nav-btn" data-screen="emergency">🚨 <span data-label="emergency">Emergency Guide</span></button>
+        <button class="nav-btn" data-screen="asha">👩‍⚕️ <span data-label="asha">ASHA Worker</span></button>
+        <button class="nav-btn" data-screen="reminders">💊 <span data-label="reminders">Medicine</span></button>
+        <button class="nav-btn" data-screen="profile">👤 <span data-label="profile">Profile</span></button>
+
+        <a class="nav-btn" href="{% url 'admin_login' %}" style="display:flex; margin-top: 15px; background: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe; text-decoration: none;">
+          📊 <span>Admin Data</span>
+        </a>
+
+        <form action="{% url 'logout' %}" method="post" style="width: 100%; margin: 10px 0 0 0;">
+          {% csrf_token %}
+          <button type="submit" class="nav-btn" style="color: #ef4444; width: 100%; justify-content: flex-start; background: #fee2e2;">🚪 <span>Log Out</span></button>
+        </form>
+      </nav>
+    </aside>
+
+    <div class="main-column">
+      <header class="topbar panel">
+        <div>
+          <h2 id="topbar-title">SwasthyaSaathi</h2>
+          <p id="topbar-subtitle">AI-enabled multilingual rural health support</p>
+        </div>
+        <div class="topbar-actions">
+          <button class="ghost-btn" onclick="window.location.href='tel:108'">108</button>
+        </div>
+      </header>
+
+      <main class="content-grid">
+        <section id="screen-chat" class="screen active panel chat-panel">
+          <div class="section-head">
+            <div>
+              <h2 data-label="chat">Chat</h2>
+              <p id="chat-subtitle">Describe symptoms for triage and care suggestions.</p>
+            </div>
+          </div>
+          <div class="chat-messages" id="chat-messages"></div>
+          <div class="quick-area">
+            <div class="section-caption" id="quick-title">Quick symptom buttons</div>
+            <div class="quick-replies" id="quick-replies"></div>
+          </div>
+          <div class="chat-input-bar">
+            <button class="circle-btn secondary" id="voice-btn" title="Voice Input" style="display:flex; justify-content:center; align-items:center;">🎤</button>
+            <input type="text" id="chat-input" placeholder="Type your message..." />
+            <button class="primary-btn send-btn" id="send-btn">
+              <span class="nav-text" data-en="Send" data-hi="भेजें">Send</span>
+            </button>
+          </div>
+        </section>
+
+        <section id="screen-nearby" class="screen panel">
+          <div class="hero-card map-card">
+            <div>
+              <h2 id="nearby-title">Nearby Care</h2>
+              <p id="nearby-subtitle">Hospitals, clinics and pharmacies close to you</p>
+            </div>
+            <div class="map-visual">
+              <div class="map-pin pin-a"></div>
+              <div class="map-pin pin-b"></div>
+              <div class="map-pin pin-c"></div>
+            </div>
+          </div>
+          <div class="filter-row">
+            <button class="chip active" data-filter-type="all" id="filter-all">All</button>
+            <button class="chip" data-filter-type="hospital" id="filter-hospital">Hospital</button>
+            <button class="chip" data-filter-type="clinic" id="filter-clinic">Clinic</button>
+            <button class="chip" data-filter-type="pharmacy" id="filter-pharmacy">Pharmacy</button>
+          </div>
+          <div id="facility-list" class="card-list three-col"></div>
+        </section>
+
+        <section id="screen-emergency" class="screen panel">
+          <div class="hero-card emergency-banner">
+            <div style="width: 100%;">
+              <h2 id="emergency-header" style="text-align: center; margin-bottom: 0.5rem; color: #b91c1c;">Emergency First Aid</h2>
+              <p id="emergency-sub" style="text-align: center; margin-bottom: 1.5rem;">Quick help for common emergencies</p>
+              
+              <div style="background: linear-gradient(135deg, #ef4444, #dc2626); border-radius: 16px; padding: 1.5rem; text-align: center; color: white; box-shadow: 0 10px 25px rgba(239, 68, 68, 0.4);">
+                <h3 style="font-size: 1.5rem; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 2px;">🚨 SOS Alert</h3>
+                <p style="opacity: 0.9; margin-bottom: 1rem; font-size: 0.9rem;">Instantly alert your registered family member</p>
+                
+                {% if request.user.patient_profile.emergency_contact or request.user.patient_profile.emergency_email %}
+                <button onclick="triggerSOS('{{ request.user.patient_profile.emergency_contact }}')" id="sos-btn" style="background: white; color: #dc2626; border: none; padding: 1rem 2rem; border-radius: 30px; font-weight: bold; font-size: 1.1rem; cursor: pointer; display: inline-flex; align-items: center; gap: 0.5rem; box-shadow: 0 4px 15px rgba(0,0,0,0.2); transition: transform 0.2s; margin-top: 1rem;">
+                  <span style="font-size: 1.5rem;">🔴</span> TRIGGER SOS
+                </button>
+                <div id="sos-status" style="margin-top: 1rem; font-size: 0.85rem; opacity: 0.9; min-height: 1.2rem;"></div>
+                {% else %}
+                <div style="background: rgba(255,255,255,0.2); padding: 0.75rem; border-radius: 8px; font-size: 0.9rem;">
+                  No emergency contact registered.<br>Please update your Profile settings.
+                </div>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+          <div style="text-align: center; margin-top: 1rem; margin-bottom: 1.5rem;">
+            <a class="danger-btn" id="call-108-btn" href="tel:108" style="background: #111827; box-shadow: none; display: inline-block;">Call 108 Ambulance</a>
+          </div>
+          <div id="emergency-grid" class="grid three"></div>
+          <div id="emergency-detail" class="modal hidden">
+            <div class="modal-backdrop"></div>
+            <div class="modal-card">
+              <button class="modal-close" id="close-emergency-detail">✕</button>
+              <div id="emergency-detail-content"></div>
+            </div>
+          </div>
+        </section>
+
+        <section id="screen-asha" class="screen panel">
+          <div class="hero-card">
+            <div>
+              <h2 id="asha-title">ASHA Worker Mode</h2>
+              <p id="asha-subtitle">Manage patient follow-up and quick triage</p>
+            </div>
+            <label class="toggle">
+              <input type="checkbox" id="asha-toggle" checked>
+              <span class="slider"></span>
+            </label>
+          </div>
+
+          <div class="stats-grid">
+            <div class="stat-card"><span id="stat-total">0</span><small id="stat-total-label">Patients</small></div>
+            <div class="stat-card"><span id="stat-high">0</span><small id="stat-high-label">High Priority</small></div>
+            <div class="stat-card"><span id="stat-today">3</span><small id="stat-today-label">Today</small></div>
+            <div class="stat-card"><span id="stat-pending">0</span><small id="stat-pending-label">Pending</small></div>
+          </div>
+
+          <div class="form-card">
+            <h3 id="add-patient-title">Add New Patient</h3>
+            <div class="form-grid">
+              <input id="patient-name" placeholder="Full Name" />
+              <input id="patient-age" type="number" placeholder="Age" />
+              <input id="patient-gender" placeholder="Gender" />
+              <input id="patient-village" placeholder="Village" />
+              <input id="patient-phone" placeholder="Phone" />
+              <input id="patient-condition" placeholder="Condition" />
+              <select id="patient-priority">
+                <option value="low">Low</option>
+                <option value="medium">Medium</option>
+                <option value="high">High</option>
+              </select>
+            </div>
+            <button id="add-patient-btn" class="primary-btn full">Add Patient</button>
+          </div>
+
+          <div id="patient-list" class="card-list two-col"></div>
+        </section>
+
+        <section id="screen-reminders" class="screen panel">
+          <div class="hero-card">
+            <div>
+              <h2 id="medicine-title">Medicine Reminder</h2>
+              <p id="medicine-subtitle">Track doses and daily medicines</p>
+            </div>
+            <div style="display: flex; gap: 0.5rem; align-items: center;">
+              <button onclick="document.getElementById('edit-med-id').value=''; document.getElementById('new-med-name').value=''; document.getElementById('new-med-qty').value=''; document.getElementById('new-med-time').value=''; document.getElementById('add-medicine-modal').style.display='flex'" style="background: var(--primary); border: none; color: white; padding: 0.5rem 1rem; border-radius: 20px; font-size: 0.8rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 0.2rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);">
+                <span style="font-size: 1.1rem; line-height: 1;">+</span> Add Medicine
+              </button>
+              <span class="badge" id="daily-badge">Daily</span>
+            </div>
+          </div>
+          <div id="medicine-list" class="card-list two-col"></div>
+        </section>
+
+        <section id="screen-profile" class="screen panel">
+          <div class="hero-card profile-card" style="position: relative;">
+            <button onclick="document.getElementById('edit-profile-modal').style.display='flex'" style="position: absolute; top: 1rem; right: 1rem; background: rgba(255,255,255,0.2); border: none; color: white; padding: 0.5rem 1rem; border-radius: 20px; font-size: 0.8rem; font-weight: 600; cursor: pointer;">
+              ✏️ <span data-i18n="prof_edit">Edit</span>
+            </button>
+            <div style="display: flex; align-items: center; gap: 1rem;">
+              <div class="avatar" style="background: linear-gradient(135deg, var(--primary), var(--secondary)); box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3);">
+                {{ request.user.username|make_list|first|upper }}
+              </div>
+              <div>
+                <h2>{{ request.user.username|title }}</h2>
+                <p style="opacity: 0.9;">{{ request.user.email|default:"No email provided" }}</p>
+              </div>
+            </div>
+            
+            {% if request.user.patient_profile %}
+            <div style="margin-top: 1.5rem; background: rgba(255,255,255,0.15); padding: 1rem; border-radius: 12px; border: 1px solid rgba(255,255,255,0.2);">
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <div>
+                  <div style="font-size: 0.8rem; opacity: 0.8; margin-bottom: 0.2rem;" data-i18n="prof_age">Age</div>
+                  <div style="font-weight: 600; font-size: 1.1rem;">{{ request.user.patient_profile.age }} yrs</div>
+                </div>
+                <div>
+                  <div style="font-size: 0.8rem; opacity: 0.8; margin-bottom: 0.2rem;" data-i18n="prof_gen">Gender</div>
+                  <div style="font-weight: 600; font-size: 1.1rem;">{{ request.user.patient_profile.get_gender_display|default:"Other" }}</div>
+                </div>
+                <div style="grid-column: 1 / -1; margin-top: 0.5rem; display: flex; flex-direction: column; gap: 0.8rem;">
+                  <div>
+                    <div style="font-size: 0.8rem; opacity: 0.8; margin-bottom: 0.2rem;" data-i18n="prof_med">Major Health Conditions</div>
+                    <div style="font-weight: 600; font-size: 1.05rem;">
+                      {% if request.user.patient_profile.medical_history %}
+                        {{ request.user.patient_profile.medical_history|join:", " }}
+                      {% else %}
+                        None reported
+                      {% endif %}
+                    </div>
+                  </div>
+                  <div>
+                    <div style="font-size: 0.8rem; opacity: 0.8; margin-bottom: 0.2rem;" data-i18n="prof_allergies">Allergies</div>
+                    <div style="font-weight: 600; font-size: 1.05rem;">
+                      {% if request.user.patient_profile.allergies %}
+                        {{ request.user.patient_profile.allergies|join:", " }}
+                      {% else %}
+                        No known allergies
+                      {% endif %}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            </div>
+            {% endif %}
+          </div>
+          
+          <div class="section-title" style="margin-top: 1.5rem;" data-i18n="prof_history">Past Consultations</div>
+          <div class="card-list">
+            {% for session in request.user.chat_sessions.all|dictsortreversed:"created_at" %}
+              {% if session.symptoms %}
+              <div class="info-card" style="border-left: 4px solid var(--primary);">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
+                  <div style="font-weight: 600; color: var(--text);">{{ session.created_at|date:"M d, Y - h:i A" }}</div>
+                  <div class="badge urgency-{{ session.urgency_level|lower|default:'low' }}">{{ session.urgency_level|title|default:'Low' }}</div>
+                </div>
+                <div style="font-size: 0.9rem; margin-bottom: 0.5rem;">
+                  <span style="opacity: 0.7;" data-i18n="prof_symp">Symptoms:</span> 
+                  <span style="font-weight: 500;">{{ session.symptoms|join:", " }}</span>
+                </div>
+                {% if session.predicted_conditions %}
+                <div style="font-size: 0.9rem; background: rgba(0,0,0,0.03); padding: 0.5rem; border-radius: 6px;">
+                  <span style="opacity: 0.7;" data-i18n="prof_diag">Likely Condition:</span>
+                  <span style="font-weight: 500; color: var(--primary);">{{ session.predicted_conditions|join:", " }}</span>
+                </div>
+                {% endif %}
+              </div>
+              {% endif %}
+            {% empty %}
+              <div class="info-card" style="text-align: center; opacity: 0.7; padding: 2rem;">
+                <p data-i18n="prof_no_history">No past consultations found.</p>
+              </div>
+            {% endfor %}
+          </div>
+
+          <div class="card-list two-col">
+            <div class="info-card">
+              <h3 id="emergency-numbers-title">Emergency Numbers</h3>
+              <p><strong>108</strong> Ambulance</p>
+              <p><strong>102</strong> Maternal & child transport</p>
+              <p><strong>112</strong> National emergency</p>
+            </div>
+            <div class="info-card">
+              <h3 id="about-title">About</h3>
+              <p id="about-text">This multilingual symptom checker supports rural patients, ASHA workers and district health teams.</p>
+            </div>
+            <div class="info-card full-span">
+              <h3 id="disclaimer-title">Disclaimer</h3>
+              <p id="disclaimer-text">This app does not replace a doctor. In emergencies, go to the nearest hospital or call 108.</p>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <!-- Add Medicine Modal -->
+      <div id="add-medicine-modal" class="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 9999; align-items: center; justify-content: center;">
+        <div style="background: #ffffff; width: 92%; max-width: 400px; border-radius: 16px; padding: 2rem; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); position: relative; display: flex; flex-direction: column;">
+          <button type="button" onclick="document.getElementById('add-medicine-modal').style.display='none'" style="position: absolute; top: 1rem; right: 1rem; background: none; border: none; font-size: 1.5rem; color: #6b7280; cursor: pointer;">&times;</button>
+          
+          <h3 style="margin-bottom: 1.5rem; font-size: 1.5rem; font-weight: 700; color: #111827; border-bottom: 2px solid #e5e7eb; padding-bottom: 0.5rem;">Add / Edit Medicine</h3>
+          
+          <form onsubmit="event.preventDefault(); submitCustomMedicine();" style="display: flex; flex-direction: column; gap: 1rem;">
+            <input type="hidden" id="edit-med-id" value="">
+            <div>
+              <label style="display: block; font-size: 0.9rem; font-weight: 600; color: #374151; margin-bottom: 0.4rem;">Medicine Name</label>
+              <input type="text" id="new-med-name" required placeholder="e.g. Paracetamol" style="width: 100%; padding: 0.75rem; border: 1px solid #d1d5db; border-radius: 8px; font-size: 1rem; color: #111827;">
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+              <div>
+                <label style="display: block; font-size: 0.9rem; font-weight: 600; color: #374151; margin-bottom: 0.4rem;">Quantity / Dose</label>
+                <input type="text" id="new-med-qty" required placeholder="e.g. 1 Tablet" style="width: 100%; padding: 0.75rem; border: 1px solid #d1d5db; border-radius: 8px; font-size: 1rem; color: #111827;">
+              </div>
+              <div>
+                <label style="display: block; font-size: 0.9rem; font-weight: 600; color: #374151; margin-bottom: 0.4rem;">Time to Take</label>
+                <input type="text" id="new-med-time" required placeholder="e.g. Morning, 8:00 AM" style="width: 100%; padding: 0.75rem; border: 1px solid #d1d5db; border-radius: 8px; font-size: 1rem; color: #111827;">
+              </div>
+            </div>
+
+            <div style="display: flex; gap: 1rem; justify-content: flex-end; margin-top: 1rem; border-top: 1px solid #e5e7eb; padding-top: 1rem;">
+              <button type="button" onclick="document.getElementById('add-medicine-modal').style.display='none'" style="padding: 0.75rem 1.5rem; background: #ffffff; color: #4b5563; border: 1px solid #d1d5db; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.2s;">Cancel</button>
+              <button type="submit" style="padding: 0.75rem 1.5rem; background: var(--primary); color: #ffffff; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 6px -1px rgba(5, 150, 105, 0.2);">Save Medicine</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <nav class="bottom-nav panel">
+        <button class="nav-btn active" onclick="showScreen('chat')">💬 <span>Chat</span></button>
+        <button class="nav-btn" onclick="showScreen('nearby')">📍 <span>Nearby</span></button>
+        <button class="nav-btn" onclick="showScreen('emergency')">🚨 <span>Emergency</span></button>
+        <button class="nav-btn" onclick="showScreen('asha')">👩‍⚕️ <span>ASHA</span></button>
+        <button class="nav-btn" onclick="showScreen('reminders')">💊 <span>Meds</span></button>
+        <button class="nav-btn" onclick="showScreen('profile')">👤 <span>Me</span></button>
+        
+        <button class="nav-btn" onclick="window.location.href='{% url 'admin_login' %}'" style="color: #2563eb; background: #eff6ff;">
+          📊 <span>Admin</span>
+        </button>
+
+        <form action="{% url 'logout' %}" method="post" style="display: flex; margin: 0; align-items: stretch;">
+          {% csrf_token %}
+          <button type="submit" class="nav-btn" style="color: #ef4444; height: 100%; background: #fee2e2; border-radius: 0;">🚪 <span>Exit</span></button>
+        </form>
+      </nav>
+      
+      <!-- Edit Profile Modal -->
+      <div id="edit-profile-modal" class="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 9999; align-items: center; justify-content: center;">
+        <div style="background: #ffffff; width: 92%; max-width: 450px; border-radius: 16px; padding: 2rem; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); position: relative; display: flex; flex-direction: column; max-height: 90vh; overflow-y: auto;">
+          <button type="button" onclick="document.getElementById('edit-profile-modal').style.display='none'" style="position: absolute; top: 1rem; right: 1rem; background: none; border: none; font-size: 1.5rem; color: #6b7280; cursor: pointer;">&times;</button>
+          
+          <h3 style="margin-bottom: 1.5rem; font-size: 1.5rem; font-weight: 700; color: #111827; border-bottom: 2px solid #e5e7eb; padding-bottom: 0.5rem;" data-i18n="prof_edit_title">Edit Profile</h3>
+          
+          <form action="/api/profile/update/" method="POST" style="display: flex; flex-direction: column; gap: 1rem;">
+            {% csrf_token %}
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+              <div>
+                <label style="display: block; font-size: 0.9rem; font-weight: 600; color: #374151; margin-bottom: 0.4rem;" data-i18n="prof_age">Age</label>
+                <input type="number" name="age" value="{{ request.user.patient_profile.age|default:'30' }}" required style="width: 100%; padding: 0.75rem; border: 1px solid #d1d5db; border-radius: 8px; font-size: 1rem; color: #111827;" min="1" max="120">
+              </div>
+              <div>
+                <label style="display: block; font-size: 0.9rem; font-weight: 600; color: #374151; margin-bottom: 0.4rem;" data-i18n="prof_gen">Gender</label>
+                <select name="gender" style="width: 100%; padding: 0.75rem; border: 1px solid #d1d5db; border-radius: 8px; font-size: 1rem; color: #111827; background-color: #f9fafb;">
+                  <option value="O" {% if request.user.patient_profile.gender == 'O' %}selected{% endif %}>Other</option>
+                  <option value="M" {% if request.user.patient_profile.gender == 'M' %}selected{% endif %}>Male</option>
+                  <option value="F" {% if request.user.patient_profile.gender == 'F' %}selected{% endif %}>Female</option>
+                </select>
+              </div>
+            </div>
+            
+            <div>
+              <label style="display: block; font-size: 0.9rem; font-weight: 600; color: #374151; margin-bottom: 0.4rem;" data-i18n="prof_med">Major Health Conditions</label>
+              <textarea name="medical_history" rows="2" style="width: 100%; padding: 0.75rem; border: 1px solid #d1d5db; border-radius: 8px; font-size: 1rem; color: #111827; font-family: inherit; resize: vertical;" placeholder="e.g. Asthma, Diabetes">{{ request.user.patient_profile.medical_history|join:', ' }}</textarea>
+              <div style="font-size: 0.75rem; color: #6b7280; margin-top: 0.2rem;">Separate multiple conditions with commas.</div>
+            </div>
+
+            <div>
+              <label style="display: block; font-size: 0.9rem; font-weight: 600; color: #374151; margin-bottom: 0.4rem;" data-i18n="prof_allergies">Allergies</label>
+              <textarea name="allergies" rows="2" style="width: 100%; padding: 0.75rem; border: 1px solid #d1d5db; border-radius: 8px; font-size: 1rem; color: #111827; font-family: inherit; resize: vertical;" placeholder="e.g. Peanuts, Penicillin">{{ request.user.patient_profile.allergies|join:', ' }}</textarea>
+              <div style="font-size: 0.75rem; color: #6b7280; margin-top: 0.2rem;">Separate multiple allergies with commas.</div>
+            </div>
+
+            <div style="display: flex; gap: 1rem; justify-content: flex-end; margin-top: 1rem; border-top: 1px solid #e5e7eb; padding-top: 1rem;">
+              <button type="button" onclick="document.getElementById('edit-profile-modal').style.display='none'" style="padding: 0.75rem 1.5rem; background: #ffffff; color: #4b5563; border: 1px solid #d1d5db; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.2s;" data-i18n="btn_cancel">Cancel</button>
+              <button type="submit" style="padding: 0.75rem 1.5rem; background: #059669; color: #ffffff; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 6px -1px rgba(5, 150, 105, 0.2);" data-i18n="btn_save">Save Changes</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script id="lang-data" type="application/json">{{ lang_payload|safe }}</script>
+  <script src="{% static 'core/js/app.js' %}"></script>
+</body>
+</html>

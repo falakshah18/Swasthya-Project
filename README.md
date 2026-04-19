@@ -546,3 +546,10 @@ portfolio presentation
 deployment practice
 DevOps learning
 full-stack project demonstration
+## 👥 Contributors
+
+This project was developed by:
+* **Falak Shah**
+* **Hiranshee Doshi**
+* **Jyotier Vithlani**
+* **Tanmay Kanani**
